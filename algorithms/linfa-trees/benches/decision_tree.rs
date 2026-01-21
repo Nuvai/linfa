@@ -36,7 +36,7 @@ fn decision_tree_bench(c: &mut Criterion) {
 
     for n in training_set_sizes.iter() {
         let centroids =
-            Array2::random_using((n_classes, n_features), Uniform::new(-30., 30.), &mut rng);
+            Array2::random_using((n_classes, n_features), Uniform::new(-30., 30.).unwrap(), &mut rng);
 
         let train_x = generate_blobs(&centroids, *n, &mut rng);
         #[allow(clippy::manual_repeat_n)]

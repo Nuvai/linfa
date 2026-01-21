@@ -7,6 +7,7 @@ use crate::{k_means::errors::KMeansError, KMeansInit};
 use linfa::{prelude::*, DatasetBase, Float};
 use linfa_nn::distance::{Distance, L2Dist};
 use ndarray::{Array1, Array2, ArrayBase, Axis, Data, DataMut, Ix1, Ix2, Zip};
+use ndarray_rand::rand::distr::weighted::Weight;
 use ndarray_rand::rand::{Rng, SeedableRng};
 use rand_xoshiro::Xoshiro256Plus;
 
@@ -216,7 +217,7 @@ impl<F: Float, D: Distance<F>> KMeans<F, D> {
     }
 }
 
-impl<F: Float, R: Rng + Clone, DA: Data<Elem = F>, T, D: Distance<F>>
+impl<F: Float + Weight, R: Rng + Clone, DA: Data<Elem = F>, T, D: Distance<F>>
     Fit<ArrayBase<DA, Ix2>, T, KMeansError> for KMeansValidParams<F, R, D>
 {
     type Object = KMeans<F, D>;
@@ -292,7 +293,7 @@ impl<F: Float, R: Rng + Clone, DA: Data<Elem = F>, T, D: Distance<F>>
     }
 }
 
-impl<'a, F: Float + Debug, R: Rng + Clone, DA: Data<Elem = F>, T, D: 'a + Distance<F> + Debug>
+impl<'a, F: Float + Debug + Weight, R: Rng + Clone, DA: Data<Elem = F>, T, D: 'a + Distance<F> + Debug>
     FitWith<'a, ArrayBase<DA, Ix2>, T, IncrKMeansError<KMeans<F, D>>>
     for KMeansValidParams<F, R, D>
 {
@@ -644,7 +645,7 @@ mod tests {
 
     fn test_n_runs<D: Distance<f64>>(dist_fn: D) {
         let mut rng = Xoshiro256Plus::seed_from_u64(42);
-        let xt = Array::random_using(100, Uniform::new(0., 1.0), &mut rng).insert_axis(Axis(1));
+        let xt = Array::random_using(100, Uniform::new(0., 1.0).unwrap(), &mut rng).insert_axis(Axis(1));
         let yt = function_test_1d(&xt);
         let data = concatenate(Axis(1), &[xt.view(), yt.view()]).unwrap();
 
@@ -713,12 +714,12 @@ mod tests {
 
         // Let's setup a synthetic set of observations, composed of two clusters with known means
         let cluster_1: Array2<f64> =
-            Array::random((cluster_size, n_features), Uniform::new(-100., 100.));
+            Array::random((cluster_size, n_features), Uniform::new(-100., 100.).unwrap());
         let memberships_1 = Array1::zeros(cluster_size);
         let expected_centroid_1 = cluster_1.sum_axis(Axis(0)) / (cluster_size + 1) as f64;
 
         let cluster_2: Array2<f64> =
-            Array::random((cluster_size, n_features), Uniform::new(-100., 100.));
+            Array::random((cluster_size, n_features), Uniform::new(-100., 100.).unwrap());
         let memberships_2 = Array1::ones(cluster_size);
         let expected_centroid_2 = cluster_2.sum_axis(Axis(0)) / (cluster_size + 1) as f64;
 
@@ -762,7 +763,7 @@ mod tests {
         let mut rng = Xoshiro256Plus::seed_from_u64(42);
         let centroids: Array2<f64> = Array::random_using(
             (n_centroids, n_features),
-            Uniform::new(-100., 100.),
+            Uniform::new(-100., 100.).unwrap(),
             &mut rng,
         );
 
@@ -847,7 +848,7 @@ mod tests {
     #[test]
     fn test_max_n_iterations() {
         let mut rng = Xoshiro256Plus::seed_from_u64(42);
-        let xt = Array::random_using(100, Uniform::new(0., 1.0), &mut rng).insert_axis(Axis(1));
+        let xt = Array::random_using(100, Uniform::new(0., 1.0).unwrap(), &mut rng).insert_axis(Axis(1));
         let yt = function_test_1d(&xt);
         let data = concatenate(Axis(1), &[xt.view(), yt.view()]).unwrap();
         let dataset = DatasetBase::from(data.clone());

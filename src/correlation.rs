@@ -68,7 +68,7 @@ fn p_values<F: Float, D: Data<Elem = F>>(
     }
 
     let mut p_values = Array1::zeros(n * (n - 1) / 2);
-    let mut rng = SmallRng::from_entropy();
+    let mut rng = SmallRng::from_os_rng();
 
     // calculate p-values by shuffling features `num_iter` times
     for _ in 0..num_iter {
@@ -299,7 +299,7 @@ mod tests {
     fn uniform_random() {
         // create random number generator and random matrix with uniform distribution
         let mut rng = SmallRng::seed_from_u64(42);
-        let data = Array::random_using((1000, 4), Uniform::new(-1., 1.), &mut rng);
+        let data = Array::random_using((1000, 4), Uniform::new(-1., 1.).unwrap(), &mut rng);
 
         // calculate PCCs and test that they are indeed near zero
         let pcc = DatasetBase::from(data).pearson_correlation();
@@ -309,10 +309,10 @@ mod tests {
     #[test]
     fn perfectly_correlated() {
         let mut rng = SmallRng::seed_from_u64(42);
-        let v = Array::random_using((4, 1), Uniform::new(0., 1.), &mut rng);
+        let v = Array::random_using((4, 1), Uniform::new(0., 1.).unwrap(), &mut rng);
 
         // project feature with matrix
-        let data = Array::random_using((1000, 1), Uniform::new(-1., 1.), &mut rng);
+        let data = Array::random_using((1000, 1), Uniform::new(-1., 1.).unwrap(), &mut rng);
         let data_proj = data.dot(&v.t());
 
         let corr = DatasetBase::from(concatenate![Axis(1), data, data_proj])

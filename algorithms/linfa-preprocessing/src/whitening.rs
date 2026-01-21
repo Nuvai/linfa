@@ -227,7 +227,7 @@ mod tests {
     use approx::assert_abs_diff_eq;
 
     use ndarray_rand::{
-        rand::distributions::Uniform, rand::rngs::SmallRng, rand::SeedableRng, RandomExt,
+        rand::distr::Uniform, rand::rngs::SmallRng, rand::SeedableRng, RandomExt,
     };
 
     fn cov<D: Data<Elem = f64>>(x: &ArrayBase<D, Ix2>) -> Array2<f64> {

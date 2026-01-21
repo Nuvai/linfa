@@ -30,7 +30,7 @@ fn gaussian_mixture_bench(c: &mut Criterion) {
                 let n_clusters = 4;
                 let n_features = 3;
                 let centroids =
-                    Array2::random_using((n_clusters, n_features), Uniform::new(-30., 30.), rng);
+                    Array2::random_using((n_clusters, n_features), Uniform::new(-30., 30.).unwrap(), rng);
                 let dataset: DatasetBase<_, _> =
                     (generate::blobs(cluster_size, &centroids, rng)).into();
                 bencher.iter(|| {

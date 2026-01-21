@@ -6,6 +6,7 @@ use crate::k_means::KMeans;
 use linfa::{prelude::*, DatasetBase, Float};
 use linfa_linalg::{cholesky::*, triangular::*};
 use ndarray::{s, Array, Array1, Array2, Array3, ArrayBase, Axis, Data, Ix2, Ix3, Zip};
+use ndarray_rand::rand::distr::weighted::Weight;
 use ndarray_rand::rand::Rng;
 use ndarray_rand::rand_distr::Uniform;
 use ndarray_rand::RandomExt;
@@ -121,7 +122,7 @@ impl<F: Float> Clone for GaussianMixtureModel<F> {
     }
 }
 
-impl<F: Float> GaussianMixtureModel<F> {
+impl<F: Float + Weight> GaussianMixtureModel<F> {
     fn new<D: Data<Elem = F>, R: Rng + Clone, T>(
         hyperparameters: &GmmValidParams<F, R>,
         dataset: &DatasetBase<ArrayBase<D, Ix2>, T>,
@@ -148,7 +149,7 @@ impl<F: Float> GaussianMixtureModel<F> {
             GmmInitMethod::Random => {
                 let mut resp = Array2::<f64>::random_using(
                     (n_samples, hyperparameters.n_clusters()),
-                    Uniform::new(0., 1.),
+                    Uniform::new(0., 1.).unwrap(),
                     &mut rng,
                 );
                 let totals = &resp.sum_axis(Axis(1)).insert_axis(Axis(0));
@@ -409,7 +410,7 @@ impl<F: Float> GaussianMixtureModel<F> {
     }
 }
 
-impl<F: Float, R: Rng + Clone, D: Data<Elem = F>, T> Fit<ArrayBase<D, Ix2>, T, GmmError>
+impl<F: Float + Weight, R: Rng + Clone, D: Data<Elem = F>, T> Fit<ArrayBase<D, Ix2>, T, GmmError>
     for GmmValidParams<F, R>
 {
     type Object = GaussianMixtureModel<F>;
@@ -625,7 +626,7 @@ mod tests {
     #[test]
     fn test_zeroed_reg_covar_failure() {
         let mut rng = Xoshiro256Plus::seed_from_u64(42);
-        let xt = Array2::random_using((50, 1), Uniform::new(0., 1.0), &mut rng);
+        let xt = Array2::random_using((50, 1), Uniform::new(0., 1.0).unwrap(), &mut rng);
         let yt = function_test_1d(&xt);
         let data = concatenate(Axis(1), &[xt.view(), yt.view()]).unwrap();
         let dataset = DatasetBase::from(data);

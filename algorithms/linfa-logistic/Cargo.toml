@@ -24,10 +24,10 @@ version = "1.0"
 
 [dependencies]
 ndarray = { version = "0.17", features = ["approx"] }
-ndarray-stats = "0.6.0"
+ndarray-stats = "0.7"
 num-traits = "0.2"
-argmin = { version = "0.11.0", default-features = false }
-argmin-math = { version = "0.5", features = ["ndarray_v0_16-nolinalg"] }
+argmin = { git = "https://github.com/Nuvai/argmin", branch = "feat/ndarray-0.17-upgrade", default-features = false }
+argmin-math = { git = "https://github.com/Nuvai/argmin", branch = "feat/ndarray-0.17-upgrade", features = ["ndarray_v0_17-nolinalg"] }
 thiserror = "2.0"
 
 linfa = { version = "0.8.0", path = "../.." }

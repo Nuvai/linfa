@@ -420,7 +420,7 @@ mod tests {
     use rand_xoshiro::Xoshiro256Plus;
 
     pub fn generate_convoluted_rings(n_points: usize) -> Array2<f64> {
-        let mut out = Array::random((n_points * 2, 2), Uniform::new(0f64, 1.));
+        let mut out = Array::random((n_points * 2, 2), Uniform::new(0f64, 1.).unwrap());
         for (i, mut elm) in out.outer_iter_mut().enumerate() {
             // generate convoluted rings with 1/10th noise
             let phi = TAU * elm[1];
@@ -443,8 +443,8 @@ mod tests {
         let entries: Array2<f64> = ndarray::concatenate(
             Axis(0),
             &[
-                Array::random((10, 2), Uniform::new(-1., -0.5)).view(),
-                Array::random((10, 2), Uniform::new(0.5, 1.)).view(),
+                Array::random((10, 2), Uniform::new(-1., -0.5).unwrap()).view(),
+                Array::random((10, 2), Uniform::new(0.5, 1.).unwrap()).view(),
             ],
         )
         .unwrap();
@@ -480,7 +480,7 @@ mod tests {
     fn test_polynomial_classification() -> Result<()> {
         let mut rng = Xoshiro256Plus::seed_from_u64(42);
         // construct parabolica and classify middle area as positive and borders as negative
-        let records = Array::random_using((40, 1), Uniform::new(-2f64, 2.), &mut rng);
+        let records = Array::random_using((40, 1), Uniform::new(-2f64, 2.).unwrap(), &mut rng);
         let targets = records.map_axis(Axis(1), |x| x[0] * x[0] < 0.5);
         let dataset = Dataset::new(records, targets);
 
@@ -554,7 +554,7 @@ mod tests {
     #[test]
     fn test_reject_classification() -> Result<()> {
         // generate two clusters with 100 samples each
-        let entries = Array::random((100, 2), Uniform::new(-4., 4.));
+        let entries = Array::random((100, 2), Uniform::new(-4., 4.).unwrap());
         let dataset = Dataset::from(entries);
 
         // train model with positive and negative weight
@@ -563,7 +563,7 @@ mod tests {
             .gaussian_kernel(100.0)
             .fit(&dataset)?;
 
-        let valid = DatasetBase::from(Array::random((100, 2), Uniform::new(-10., 10f32)));
+        let valid = DatasetBase::from(Array::random((100, 2), Uniform::new(-10., 10f32).unwrap()));
         let valid = model.predict(valid);
 
         // count the number of correctly rejected samples

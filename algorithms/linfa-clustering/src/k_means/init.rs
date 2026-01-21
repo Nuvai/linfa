@@ -3,7 +3,7 @@ use linfa::Float;
 use linfa_nn::distance::Distance;
 use ndarray::parallel::prelude::*;
 use ndarray::{s, Array1, Array2, ArrayBase, ArrayView1, ArrayView2, Axis, Data, Ix2};
-use ndarray_rand::rand::distributions::{Distribution, WeightedIndex};
+use ndarray_rand::rand::distr::{weighted::{Weight, WeightedIndex}, Distribution};
 use ndarray_rand::rand::Rng;
 use ndarray_rand::rand::{self, SeedableRng};
 use rand_xoshiro::Xoshiro256Plus;
@@ -34,7 +34,7 @@ pub enum KMeansInit<F: Float> {
     KMeansPara,
 }
 
-impl<F: Float> KMeansInit<F> {
+impl<F: Float + Weight> KMeansInit<F> {
     /// Runs the chosen initialization routine
     pub(crate) fn run<R: Rng, D: Distance<F>>(
         &self,
@@ -71,7 +71,7 @@ fn random_init<F: Float>(
 /// Selects centroids using the KMeans++ initialization algorithm. The weights determine the
 /// likeliness of an input point to be selected as a centroid relative to other points. The higher
 /// the weight, the more likely the point will be selected as a centroid.
-fn weighted_k_means_plusplus<F: Float, D: Distance<F>>(
+fn weighted_k_means_plusplus<F: Float + Weight, D: Distance<F>>(
     dist_fn: &D,
     n_clusters: usize,
     observations: ArrayView2<F>,
@@ -102,6 +102,7 @@ fn weighted_k_means_plusplus<F: Float, D: Distance<F>>(
         // distance from its closest centroid multiplied by its weight.
         dists *= &weights;
         let centroid_idx = WeightedIndex::new(dists.iter())
+            .ok()
             .map(|idx| idx.sample(rng))
             // This only errs if all of dists is 0, which means every point is assigned to a
             // centroid, so extra centroids don't matter and can be any index.
@@ -114,7 +115,7 @@ fn weighted_k_means_plusplus<F: Float, D: Distance<F>>(
 }
 
 /// KMeans++ initialization algorithm without biased weights
-fn k_means_plusplus<F: Float, D: Distance<F>>(
+fn k_means_plusplus<F: Float + Weight, D: Distance<F>>(
     dist_fn: &D,
     n_clusters: usize,
     observations: ArrayView2<F>,
@@ -134,7 +135,7 @@ fn k_means_plusplus<F: Float, D: Distance<F>>(
 /// input point in parallel. The probability of a point becoming a centroid is the same as with
 /// KMeans++. After multiple iterations, run weighted KMeans++ on the candidates to produce the
 /// final set of centroids.
-fn k_means_para<R: Rng, F: Float, D: Distance<F>>(
+fn k_means_para<R: Rng, F: Float + Weight, D: Distance<F>>(
     dist_fn: &D,
     n_clusters: usize,
     observations: ArrayView2<F>,
@@ -374,7 +375,7 @@ mod tests {
         }};
     }
 
-    fn test_compare<D: Distance<f64>>(dist_fn: D) {
+    fn test_compare<D: Distance<f64> + Clone>(dist_fn: D) {
         let mut rng = Xoshiro256Plus::seed_from_u64(42);
         let centroids = [20.0, -1000.0, 1000.0];
         let clusters: Vec<Array2<_>> = centroids

@@ -1142,10 +1142,10 @@ mod tests {
         let mut rng = Xoshiro256Plus::seed_from_u64(42);
 
         // check that we are selecting the subsect of informative features
-        let mut w = Array::random_using(50, Uniform::new(1., 2.), &mut rng);
+        let mut w = Array::random_using(50, Uniform::new(1., 2.).unwrap(), &mut rng);
         w.slice_mut(s![10..]).fill(0.0);
 
-        let x = Array::random_using((100, 50), Uniform::new(-1., 1.), &mut rng);
+        let x = Array::random_using((100, 50), Uniform::new(-1., 1.).unwrap(), &mut rng);
         let y = x.dot(&w);
         let train = Dataset::new(x, y);
 
@@ -1166,7 +1166,7 @@ mod tests {
         assert_eq!(num_zeros, 40);
 
         // predict a small testing dataset
-        let x = Array::random_using((100, 50), Uniform::new(-1., 1.), &mut rng);
+        let x = Array::random_using((100, 50), Uniform::new(-1., 1.).unwrap(), &mut rng);
         let y = x.dot(&w);
 
         let predicted = model.predict(&x);

@@ -30,7 +30,7 @@ fn dbscan_bench(c: &mut Criterion) {
                 let n_features = 3;
                 let tolerance = 0.3;
                 let centroids =
-                    Array2::random_using((min_points, n_features), Uniform::new(-30., 30.), rng);
+                    Array2::random_using((min_points, n_features), Uniform::new(-30., 30.).unwrap(), rng);
                 let dataset = generate::blobs(cluster_size, &centroids, rng);
 
                 bencher.iter(|| {

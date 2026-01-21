@@ -35,7 +35,7 @@ fn appx_dbscan_parity() {
     // Each cluster of 100 points is situated within a 2x2x2 cube. On average the points are 0.08
     // units apart, so they should all be in the same cluster
     let clusters =
-        generate::blobs_with_distribution(100, &centroids, Uniform::new(-1., 1.), &mut rng);
+        generate::blobs_with_distribution(100, &centroids, Uniform::new(-1., 1.).unwrap(), &mut rng);
     let dataset = concatenate![ndarray::Axis(0), clusters, outliers];
 
     let appx_res = AppxDbscan::params(min_points)

@@ -5,7 +5,7 @@ use ndarray_rand::{
     RandomExt,
 };
 use rand::{
-    distributions::{Bernoulli, Distribution, Standard},
+    distr::{Bernoulli, Distribution, StandardUniform},
     Rng,
 };
 use sprs::{CsMat, TriMat};
@@ -54,11 +54,11 @@ impl ProjectionMethod for Gaussian {
 pub struct Sparse;
 
 impl ProjectionMethod for Sparse {
-    type RandomDistribution = Standard;
+    type RandomDistribution = StandardUniform;
     type ProjectionMatrix<F: Float>
         = CsMat<F>
     where
-        Standard: Distribution<F>;
+        StandardUniform: Distribution<F>;
 
     fn generate_matrix<F: Float>(
         n_features: usize,
@@ -66,7 +66,7 @@ impl ProjectionMethod for Sparse {
         rng: &mut impl Rng,
     ) -> Result<Self::ProjectionMatrix<F>, ReductionError>
     where
-        Standard: Distribution<F>,
+        StandardUniform: Distribution<F>,
     {
         let scale = (n_features as f64).sqrt();
         let p = 1f64 / scale;

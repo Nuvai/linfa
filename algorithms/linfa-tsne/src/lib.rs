@@ -103,8 +103,8 @@ mod tests {
     #[test]
     fn autotraits() {
         fn has_autotraits<T: Send + Sync + Sized + Unpin>() {}
-        has_autotraits::<TSneParams<f64, rand::distributions::Uniform<f64>>>();
-        has_autotraits::<TSneValidParams<f64, rand::distributions::Uniform<f64>>>();
+        has_autotraits::<TSneParams<f64, rand::distr::Uniform<f64>>>();
+        has_autotraits::<TSneValidParams<f64, rand::distr::Uniform<f64>>>();
         has_autotraits::<TSneError>();
     }
 
