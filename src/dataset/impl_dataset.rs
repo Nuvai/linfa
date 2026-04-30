@@ -484,14 +484,14 @@ where
         std::iter::repeat(()).map(move |_| {
             // sample with replacement
             let indices = (0..sample_feature_size.0)
-                .map(|_| rng.gen_range(0..self.nsamples()))
+                .map(|_| rng.random_range(0..self.nsamples()))
                 .collect::<Vec<_>>();
 
             let records = self.records().select(Axis(0), &indices);
             let targets = T::new_targets(self.as_targets().select(Axis(0), &indices));
 
             let indices = (0..sample_feature_size.1)
-                .map(|_| rng.gen_range(0..self.nfeatures()))
+                .map(|_| rng.random_range(0..self.nfeatures()))
                 .collect::<Vec<_>>();
 
             let records = records.select(Axis(1), &indices);
@@ -526,14 +526,14 @@ where
         std::iter::repeat(()).map(move |_| {
             // sample with replacement
             let data_indices = (0..sample_feature_size.0)
-                .map(|_| rng.gen_range(0..self.nsamples()))
+                .map(|_| rng.random_range(0..self.nsamples()))
                 .collect::<Vec<_>>();
 
             let records = self.records().select(Axis(0), &data_indices);
             let targets = T::new_targets(self.as_targets().select(Axis(0), &data_indices));
 
             let feat_indices = (0..sample_feature_size.1)
-                .map(|_| rng.gen_range(0..self.nfeatures()))
+                .map(|_| rng.random_range(0..self.nfeatures()))
                 .collect::<Vec<_>>();
 
             let records = records.select(Axis(1), &feat_indices);
@@ -570,7 +570,7 @@ where
         std::iter::repeat(()).map(move |_| {
             // sample with replacement
             let indices = (0..num_samples)
-                .map(|_| rng.gen_range(0..self.nsamples()))
+                .map(|_| rng.random_range(0..self.nsamples()))
                 .collect::<Vec<_>>();
 
             let records = self.records().select(Axis(0), &indices);
@@ -605,7 +605,7 @@ where
         std::iter::repeat(()).map(move |_| {
             // sample with replacement
             let indices = (0..num_samples)
-                .map(|_| rng.gen_range(0..self.nsamples()))
+                .map(|_| rng.random_range(0..self.nsamples()))
                 .collect::<Vec<_>>();
 
             let records = self.records().select(Axis(0), &indices);
@@ -640,7 +640,7 @@ where
             let targets = T::new_targets(self.as_targets().to_owned());
 
             let indices = (0..num_features)
-                .map(|_| rng.gen_range(0..self.nfeatures()))
+                .map(|_| rng.random_range(0..self.nfeatures()))
                 .collect::<Vec<_>>();
 
             let records = self.records.select(Axis(1), &indices);
@@ -675,7 +675,7 @@ where
             let targets = T::new_targets(self.as_targets().to_owned());
 
             let indices = (0..num_features)
-                .map(|_| rng.gen_range(0..self.nfeatures()))
+                .map(|_| rng.random_range(0..self.nfeatures()))
                 .collect::<Vec<_>>();
 
             let records = self.records.select(Axis(1), &indices);

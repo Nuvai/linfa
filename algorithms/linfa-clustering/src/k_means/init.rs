@@ -151,7 +151,7 @@ fn k_means_para<R: Rng, F: Float + Weight, D: Distance<F>>(
     let mut candidates = Array2::zeros((n_clusters * n_rounds, n_features));
 
     // Pick 1st centroid randomly
-    let first_idx = rng.gen_range(0..n_samples);
+    let first_idx = rng.random_range(0..n_samples);
     candidates.row_mut(0).assign(&observations.row(first_idx));
     let mut n_candidates = 1;
 
@@ -165,7 +165,7 @@ fn k_means_para<R: Rng, F: Float + Weight, D: Distance<F>>(
         let next_candidates_idx = sample_subsequent_candidates::<R, _>(
             &dists,
             F::cast(candidates_per_round),
-            rng.gen_range(0..u64::MAX),
+            rng.random_range(0..u64::MAX),
         );
 
         // Append the newly generated candidates to the current cadidates, breaking out of the loop
@@ -217,7 +217,7 @@ fn sample_subsequent_candidates<R: Rng, F: Float>(
             || Xoshiro256Plus::seed_from_u64(seed.fetch_add(1, Relaxed)),
             move |rng, (i, d)| {
                 let d = *d.into_scalar();
-                let rand = F::cast(rng.gen_range(0.0..1.0));
+                let rand = F::cast(rng.random_range(0.0..1.0));
                 let prob = multiplier * d / cost;
                 (i, rand, prob)
             },

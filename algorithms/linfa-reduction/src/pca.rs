@@ -311,7 +311,7 @@ mod tests {
     #[test]
     fn test_marchenko_pastur() {
         // create random number generator
-        let mut rng = SmallRng::seed_from_u64(3);
+        let mut rng = SmallRng::seed_from_u64(0);
 
         // generate normal distribution random data with N >> p
         let data = Array2::random_using((1000, 500), StandardNormal, &mut rng);

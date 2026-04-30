@@ -691,7 +691,10 @@ mod tests {
         let to_multiply = Array2::from_shape_vec((10, 10), vec_to_multiply).unwrap();
 
         // dense kernel dot
-        let mul_mat = dense_from_fn(&input_arr, &KernelMethod::Linear).dot(&to_multiply);
+        let mul_mat = ndarray::linalg::Dot::dot(
+            &dense_from_fn(&input_arr, &KernelMethod::Linear),
+            &to_multiply,
+        );
         let kernel = KernelView::params()
             .kind(KernelType::Dense)
             .method(KernelMethod::Linear)

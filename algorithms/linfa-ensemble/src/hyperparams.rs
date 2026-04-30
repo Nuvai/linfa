@@ -30,7 +30,7 @@ pub type RandomForestParams<F, L, R> = EnsembleLearnerParams<DecisionTreeParams<
 
 impl<P> EnsembleLearnerParams<P, ThreadRng> {
     pub fn new(model_params: P) -> EnsembleLearnerParams<P, ThreadRng> {
-        Self::new_fixed_rng(model_params, rand::thread_rng())
+        Self::new_fixed_rng(model_params, rand::rng())
     }
 }
 

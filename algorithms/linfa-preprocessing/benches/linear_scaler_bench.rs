@@ -10,7 +10,7 @@ fn bench(c: &mut Criterion) {
     config::set_default_benchmark_configs(&mut benchmark);
     let size = 10000;
     let feat_distr = Laplace::new(0.5, 5.).unwrap();
-    let target_distr = DiscreteUniform::new(0, 5).unwrap().unwrap();
+    let target_distr = DiscreteUniform::new(0, 5).unwrap();
 
     for (liner_scaler, fn_name) in [
         (LinearScaler::standard(), "standard scaler"),

@@ -40,7 +40,7 @@ fn bench(c: &mut Criterion) {
     let params: [(usize, usize); 3] = [(10_000, 5), (100_000, 5), (100_000, 10)];
     for (alg, name) in [(Algorithm::Nipals, "Nipals-"), (Algorithm::Svd, "Svd-")] {
         let feat_distr = Laplace::new(0.5, 5.).unwrap();
-        let target_distr = DiscreteUniform::new(0, 5).unwrap().unwrap();
+        let target_distr = DiscreteUniform::new(0, 5).unwrap();
 
         let mut pls_regression_id = "Regression-".to_string();
         pls_regression_id.push_str(name);

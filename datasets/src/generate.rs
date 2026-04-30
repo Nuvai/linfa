@@ -65,7 +65,7 @@ fn make_blob(
 /// use ndarray_rand::{RandomExt, rand_distr::Distribution};
 /// use linfa_datasets::generate::make_dataset;
 /// let feat_distr = Laplace::new(0.5, 5. ).unwrap();
-/// let target_distr = DiscreteUniform::new(0, 5).unwrap().unwrap();
+/// let target_distr = DiscreteUniform::new(0, 5).unwrap();
 /// make_dataset(5, 5, 2, feat_distr, target_distr);
 /// ```
 pub fn make_dataset<X, Y>(

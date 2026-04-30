@@ -111,7 +111,7 @@ impl<F: Float> Distribution<Option<F>> for SparseDistribution<F> {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> Option<F> {
         let non_zero = self.b.sample(rng);
         if non_zero {
-            if rng.gen::<bool>() {
+            if rng.random::<bool>() {
                 Some(self.scale)
             } else {
                 Some(-self.scale)

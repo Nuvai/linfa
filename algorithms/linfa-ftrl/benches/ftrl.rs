@@ -91,8 +91,8 @@ fn get_dataset(
     size: usize,
     nfeatures: usize,
 ) -> DatasetBase<Array2<f64>, Array1<bool>> {
-    let features = Array2::random_using((size, nfeatures), Uniform::from(-30. ..30.), rng);
-    let target = Array1::random_using(size, Uniform::from(0. ..1.), rng).mapv(to_binary);
+    let features = Array2::random_using((size, nfeatures), Uniform::new(-30., 30.).unwrap(), rng);
+    let target = Array1::random_using(size, Uniform::new(0., 1.).unwrap(), rng).mapv(to_binary);
     Dataset::new(features, target)
 }
 
