@@ -1,6 +1,6 @@
 [package]
 name = "linfa-logistic"
-version = "0.8.0"
+version = "0.8.1"
 authors = ["Paul Körbitz / Google <koerbitz@google.com>"]
 
 description = "A Machine Learning framework for Rust"
@@ -30,11 +30,11 @@ argmin = { git = "https://github.com/Nuvai/argmin", branch = "feat/ndarray-0.17-
 argmin-math = { git = "https://github.com/Nuvai/argmin", branch = "feat/ndarray-0.17-upgrade", features = ["ndarray_v0_17-nolinalg"] }
 thiserror = "2.0"
 
-linfa = { version = "0.8.0", path = "../.." }
+linfa = { version = "0.8.1", path = "../.." }
 
 [dev-dependencies]
 approx = "0.5"
-linfa-datasets = { version = "0.8.0", path = "../../datasets", features = [
+linfa-datasets = { version = "0.8.1", path = "../../datasets", features = [
     "winequality",
 ] }
 rmp-serde = "1"
