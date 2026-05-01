@@ -3,7 +3,7 @@ use linfa::{
     dataset::{AsTargets, AsTargetsMut, FromTargetArrayOwned},
     error::Error,
     traits::*,
-    DatasetBase, ParamGuard,
+    DatasetBase,
 };
 use ndarray::{Array1, Array2, Axis};
 use ndarray_rand::rand::distr::weighted::WeightedIndex;
@@ -155,23 +155,27 @@ where
     }
 }
 
-impl<D, T, P, R> Fit<Array2<D>, T, Error> for AdaBoostValidParams<P, R>
+// Mirrors the bounds shape of `EnsembleLearnerValidParams` (algorithm.rs:137)
+// with one extra wrinkle: AdaBoost calls `predict_inplace` on the inner model
+// during fit (to compute weighted error), so the inner model type needs a
+// `PredictInplace` bound. Naming that bound directly as `P::Object: ...` would
+// re-trigger Linfa's `ParamGuard` blanket-impl recursion under ndarray 0.17 by
+// forcing the trait solver to resolve `P: Fit` to compute `P::Object`. We
+// avoid that by introducing a separate type parameter `M` and binding the
+// associated type via `Fit<..., Object = M>` so the model type is named at
+// the impl signature (where the solver doesn't have to chase blankets).
+impl<D, T, P, M, R> Fit<Array2<D>, T, Error> for AdaBoostValidParams<P, R>
 where
     D: Clone + ndarray::ScalarOperand,
-    T: FromTargetArrayOwned<Owned = T> + AsTargets + Clone,
+    T: FromTargetArrayOwned + AsTargets,
     T::Elem: Copy + Eq + Hash + std::fmt::Debug + Into<usize>,
-    P: linfa::ParamGuard + Clone,
-    <P as linfa::ParamGuard>::Checked: Fit<Array2<D>, T, Error>,
-    Error: From<<P as linfa::ParamGuard>::Error>,
-    <<P as linfa::ParamGuard>::Checked as Fit<Array2<D>, T, Error>>::Object:
-        PredictInplace<Array2<D>, T>,
+    T::Owned: AsTargets<Elem = <T as AsTargets>::Elem>,
+    P: Fit<Array2<D>, T::Owned, Error, Object = M>,
+    M: PredictInplace<Array2<D>, T::Owned>,
     R: Rng + Clone,
     usize: Into<T::Elem>,
 {
-    type Object = AdaBoost<
-        <<P as linfa::ParamGuard>::Checked as Fit<Array2<D>, T, Error>>::Object,
-        T::Elem,
-    >;
+    type Object = AdaBoost<M, T::Elem>;
 
     fn fit(
         &self,
