@@ -64,6 +64,8 @@ linfa-datasets = { path = "datasets", features = [
     "generate",
 ] }
 statrs = { git = "https://github.com/statrs-dev/statrs", branch = "master" }
+linfa-linear = { path = "algorithms/linfa-linear" }
+linfa-svm = { path = "algorithms/linfa-svm" }
 
 [target.'cfg(not(windows))'.dependencies]
 pprof = { version = "0.15", features = [
