@@ -263,18 +263,25 @@ impl<B> Stagewise for B {
     }
 }
 
-impl<F1, F2, F: Float, D: Data<Elem = F> + RawDataClone, T, E1, E2>
+// Same pattern as `AdaBoostValidParams::Fit` impl in linfa-ensemble: introduce
+// fresh generics `M1`/`M2` for the inner-model types and bind the associated
+// `Object` types via `Fit<..., Object = MN>`. This sidesteps Linfa's
+// `ParamGuard` blanket-impl recursion under ndarray 0.17 (otherwise
+// `F1::Object: Predict` would force the solver to *resolve* `F1: Fit`,
+// leading to the infinite `<<F::Checked>::Checked>::Checked: ParamGuard`
+// regress).
+impl<F1, F2, M1, M2, F: Float, D: Data<Elem = F> + RawDataClone, T, E1, E2>
     Fit<Arr2<D>, T, ResidualChainError<E1, E2>> for ResidualChain<F1, F2, F>
 where
     Arr2<D>: Records,
-    F1: Fit<Arr2<D>, T, E1>,
-    for<'a> F1::Object: Predict<&'a Arr2<D>, Array1<F>>,
-    F2: Fit<Arr2<D>, Array1<F>, E2>,
+    F1: Fit<Arr2<D>, T, E1, Object = M1>,
+    F2: Fit<Arr2<D>, Array1<F>, E2, Object = M2>,
+    for<'a> M1: Predict<&'a Arr2<D>, Array1<F>>,
     T: AsTargets<Elem = F, Ix = Ix1>,
     E1: std::error::Error + From<crate::error::Error>,
     E2: std::error::Error + From<crate::error::Error>,
 {
-    type Object = ResidualChain<F1::Object, F2::Object, F>;
+    type Object = ResidualChain<M1, M2, F>;
 
     fn fit(
         &self,
