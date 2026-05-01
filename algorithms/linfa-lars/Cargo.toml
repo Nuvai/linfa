@@ -1,6 +1,6 @@
 [package]
 name = "linfa-lars"
-version = "0.8.1"
+version = "0.9.0-nuvai.1"
 authors = ["Aswin <aswinak1111@gmail.com>"]
 description = "Least Angle Regression methods"
 edition = "2024"
@@ -25,16 +25,16 @@ default-features = false
 features = ["std", "derive"]
 
 [dependencies]
-linfa = { version = "0.8.1", path = "../.." }
+linfa = { version = "0.9.0-nuvai.1", path = "../.." }
 linfa-linalg = { git = "https://github.com/Nuvai/linfa-linalg", branch = "feat/ndarray-0.17-upgrade", default-features = false }
-linfa-preprocessing = { version = "0.8.1", path = "../linfa-preprocessing"}
+linfa-preprocessing = { version = "0.9.0-nuvai.1", path = "../linfa-preprocessing"}
 ndarray = { version = "0.17", features = ["approx"] }
 ndarray-linalg = { version = "0.18", optional = true }
 ndarray-stats = "0.7"
 thiserror = "2.0"
 
 [dev-dependencies]
-linfa-datasets = { version = "0.8.1", path = "../../datasets", features = [
+linfa-datasets = { version = "0.9.0-nuvai.1", path = "../../datasets", features = [
     "diabetes",
 ] }
 approx = "0.5"
