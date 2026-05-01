@@ -147,7 +147,7 @@ fn compute_diffusion_map<F: Float>(
             .unwrap_or_else(|| {
                 Array2::random_using(
                     (kernel.size(), embedding_size + 1),
-                    Uniform::new(0.0f64, 1.0),
+                    Uniform::new(0.0f64, 1.0).unwrap(),
                     &mut SmallRng::seed_from_u64(31),
                 )
                 .mapv(F::cast)

@@ -227,7 +227,7 @@ mod tests {
     use approx::assert_abs_diff_eq;
 
     use ndarray_rand::{
-        rand::distributions::Uniform, rand::rngs::SmallRng, rand::SeedableRng, RandomExt,
+        rand::distr::Uniform, rand::rngs::SmallRng, rand::SeedableRng, RandomExt,
     };
 
     fn cov<D: Data<Elem = f64>>(x: &ArrayBase<D, Ix2>) -> Array2<f64> {
@@ -256,7 +256,7 @@ mod tests {
     #[test]
     fn test_zca_matrix() {
         let mut rng = SmallRng::seed_from_u64(42);
-        let dataset = Array2::random_using((1000, 7), Uniform::from(-30. ..30.), &mut rng).into();
+        let dataset = Array2::random_using((1000, 7), Uniform::new(-30., 30.).unwrap(), &mut rng).into();
         let whitener = Whitener::zca().fit(&dataset).unwrap();
         let inv_cov_est = whitener
             .transformation_matrix()
@@ -269,7 +269,7 @@ mod tests {
     #[test]
     fn test_cholesky_matrix() {
         let mut rng = SmallRng::seed_from_u64(42);
-        let dataset = Array2::random_using((1000, 7), Uniform::from(-30. ..30.), &mut rng).into();
+        let dataset = Array2::random_using((1000, 7), Uniform::new(-30., 30.).unwrap(), &mut rng).into();
         let whitener = Whitener::cholesky().fit(&dataset).unwrap();
         let inv_cov_est = whitener
             .transformation_matrix()
@@ -282,7 +282,7 @@ mod tests {
     #[test]
     fn test_pca_matrix() {
         let mut rng = SmallRng::seed_from_u64(42);
-        let dataset = Array2::random_using((1000, 7), Uniform::from(-30. ..30.), &mut rng).into();
+        let dataset = Array2::random_using((1000, 7), Uniform::new(-30., 30.).unwrap(), &mut rng).into();
         let whitener = Whitener::pca().fit(&dataset).unwrap();
         let inv_cov_est = whitener
             .transformation_matrix()
@@ -295,7 +295,7 @@ mod tests {
     #[test]
     fn test_cholesky_whitening() {
         let mut rng = SmallRng::seed_from_u64(64);
-        let dataset = Array2::random_using((1000, 7), Uniform::from(-30. ..30.), &mut rng).into();
+        let dataset = Array2::random_using((1000, 7), Uniform::new(-30., 30.).unwrap(), &mut rng).into();
         let whitener = Whitener::cholesky().fit(&dataset).unwrap();
         let whitened = whitener.transform(dataset);
         let cov = cov(whitened.records());
@@ -305,7 +305,7 @@ mod tests {
     #[test]
     fn test_zca_whitening() {
         let mut rng = SmallRng::seed_from_u64(64);
-        let dataset = Array2::random_using((1000, 7), Uniform::from(-30. ..30.), &mut rng).into();
+        let dataset = Array2::random_using((1000, 7), Uniform::new(-30., 30.).unwrap(), &mut rng).into();
         let whitener = Whitener::zca().fit(&dataset).unwrap();
         let whitened = whitener.transform(dataset);
         let cov = cov(whitened.records());
@@ -315,7 +315,7 @@ mod tests {
     #[test]
     fn test_pca_whitening() {
         let mut rng = SmallRng::seed_from_u64(64);
-        let dataset = Array2::random_using((1000, 7), Uniform::from(-30. ..30.), &mut rng).into();
+        let dataset = Array2::random_using((1000, 7), Uniform::new(-30., 30.).unwrap(), &mut rng).into();
         let whitener = Whitener::pca().fit(&dataset).unwrap();
         let whitened = whitener.transform(dataset);
         let cov = cov(whitened.records());

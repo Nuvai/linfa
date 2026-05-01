@@ -11,7 +11,7 @@ pub use hyperparams::FtrlParams;
 use linfa::Float;
 use ndarray::Array1;
 use ndarray_rand::RandomExt;
-use rand::{distributions::Uniform, Rng};
+use rand::{distr::Uniform, Rng};
 use rand_xoshiro::{rand_core::SeedableRng, Xoshiro256Plus};
 #[cfg(feature = "serde")]
 use serde_crate::{Deserialize, Serialize};
@@ -69,7 +69,7 @@ impl<F: Float> Ftrl<F> {
             l1_ratio: params.l1_ratio,
             l2_ratio: params.l2_ratio,
             n: Array1::zeros(nfeatures),
-            z: Array1::random_using(nfeatures, Uniform::new(F::zero(), F::one()), &mut rng),
+            z: Array1::random_using(nfeatures, Uniform::new(F::zero(), F::one()).unwrap(), &mut rng),
         }
     }
 }

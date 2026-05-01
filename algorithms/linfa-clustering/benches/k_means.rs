@@ -45,7 +45,7 @@ fn k_means_bench(c: &mut Criterion) {
     for &(cluster_size, n_clusters) in &cluster_sizes {
         let rng = &mut rng;
         let centroids =
-            Array2::random_using((n_clusters, n_features), Uniform::new(-30., 30.), rng);
+            Array2::random_using((n_clusters, n_features), Uniform::new(-30., 30.).unwrap(), rng);
         let dataset = DatasetBase::from(generate::blobs(cluster_size, &centroids, rng));
         let mut stats = Stats::default();
 
@@ -80,7 +80,7 @@ fn k_means_incr_bench(c: &mut Criterion) {
     for &(cluster_size, n_clusters) in &cluster_sizes {
         let rng = &mut rng;
         let centroids =
-            Array2::random_using((n_clusters, n_features), Uniform::new(-30., 30.), rng);
+            Array2::random_using((n_clusters, n_features), Uniform::new(-30., 30.).unwrap(), rng);
         let dataset =
             DatasetBase::from(generate::blobs(cluster_size, &centroids, rng)).shuffle(rng);
         let mut stats = Stats::default();
@@ -133,7 +133,7 @@ fn k_means_init_bench(c: &mut Criterion) {
         for &(cluster_size, n_clusters) in &cluster_sizes {
             let rng = &mut rng;
             let centroids =
-                Array2::random_using((n_clusters, n_features), Uniform::new(-30., 30.), rng);
+                Array2::random_using((n_clusters, n_features), Uniform::new(-30., 30.).unwrap(), rng);
             let dataset = DatasetBase::from(generate::blobs(cluster_size, &centroids, rng));
             let mut stats = Stats::default();
 

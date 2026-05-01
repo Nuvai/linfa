@@ -90,9 +90,9 @@ impl<F: Float, D: Data<Elem = F>, T> Fit<ArrayBase<D, Ix2>, T, FastIcaError>
         let w: Array2<f64>;
         if let Some(seed) = self.random_state() {
             let mut rng = Xoshiro256Plus::seed_from_u64(*seed as u64);
-            w = Array::random_using((ncomponents, ncomponents), Uniform::new(0., 1.), &mut rng);
+            w = Array::random_using((ncomponents, ncomponents), Uniform::new(0., 1.).unwrap(), &mut rng);
         } else {
-            w = Array::random((ncomponents, ncomponents), Uniform::new(0., 1.));
+            w = Array::random((ncomponents, ncomponents), Uniform::new(0., 1.).unwrap());
         }
         let mut w = w.mapv(F::cast);
 
@@ -285,7 +285,7 @@ mod tests {
     // that the minimum of the number of rows and columns of the input
     #[test]
     fn test_ncomponents_err() {
-        let input = DatasetBase::from(Array::random((4, 4), Uniform::new(0.0, 1.0)));
+        let input = DatasetBase::from(Array::random((4, 4), Uniform::new(0.0, 1.0).unwrap()));
         let ica = FastIca::params().ncomponents(100);
         let ica = ica.fit(&input);
         assert!(ica.is_err());
@@ -295,7 +295,7 @@ mod tests {
     // 1 and 2 inclusive
     #[test]
     fn test_logcosh_alpha_err() {
-        let input = DatasetBase::from(Array::random((4, 4), Uniform::new(0.0, 1.0)));
+        let input = DatasetBase::from(Array::random((4, 4), Uniform::new(0.0, 1.0).unwrap()));
         let ica = FastIca::params().gfunc(GFunc::Logcosh(10.));
         let ica = ica.fit(&input);
         assert!(ica.is_err());

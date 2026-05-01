@@ -63,7 +63,7 @@ impl<P> AdaBoostParams<P, ThreadRng> {
     /// * `n_estimators`: 50
     /// * `learning_rate`: 1.0
     pub fn new(model_params: P) -> AdaBoostParams<P, ThreadRng> {
-        Self::new_fixed_rng(model_params, rand::thread_rng())
+        Self::new_fixed_rng(model_params, rand::rng())
     }
 }
 

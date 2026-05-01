@@ -765,7 +765,7 @@ mod tests {
     /// noise and do not add any information.
     fn single_feature_random_noise_binary() -> Result<()> {
         // generate data with 9 white noise and a single correlated feature
-        let mut data = Array::random((50, 10), Uniform::new(-4., 4.));
+        let mut data = Array::random((50, 10), Uniform::new(-4., 4.).unwrap());
         data.slice_mut(s![.., 8]).assign(
             &(0..50)
                 .map(|x| if x < 25 { 0.0 } else { 1.0 })
@@ -801,7 +801,7 @@ mod tests {
         let mut rng = SmallRng::seed_from_u64(42);
 
         // create very sparse data
-        let data = Array::random_using((50, 50), Uniform::new(-1., 1.), &mut rng);
+        let data = Array::random_using((50, 50), Uniform::new(-1., 1.).unwrap(), &mut rng);
         let targets = (0..50).collect::<Array1<usize>>();
 
         let dataset = Dataset::new(data, targets);
@@ -881,7 +881,7 @@ mod tests {
     fn multilabel_four_uniform() -> Result<()> {
         let mut data = concatenate(
             Axis(0),
-            &[Array2::random((40, 2), Uniform::new(-1., 1.)).view()],
+            &[Array2::random((40, 2), Uniform::new(-1., 1.).unwrap()).view()],
         )
         .unwrap();
 

@@ -266,7 +266,7 @@ mod tests {
         let mut rng = SmallRng::seed_from_u64(42);
 
         // rotate data by 45°
-        let tmp = Array2::random_using((300, 2), Uniform::new(-1.0f64, 1.), &mut rng);
+        let tmp = Array2::random_using((300, 2), Uniform::new(-1.0f64, 1.).unwrap(), &mut rng);
         let q = array![[1., 1.], [-1., 1.]];
 
         let dataset = Dataset::from(tmp.dot(&q));
@@ -289,7 +289,7 @@ mod tests {
         let mut rng = SmallRng::seed_from_u64(42);
 
         // generate random data
-        let data = Array2::random_using((300, 50), Uniform::new(-1.0f64, 1.), &mut rng);
+        let data = Array2::random_using((300, 50), Uniform::new(-1.0f64, 1.).unwrap(), &mut rng);
         let dataset = Dataset::from(data);
 
         let model = Pca::params(10).whiten(true).fit(&dataset).unwrap();
@@ -311,7 +311,7 @@ mod tests {
     #[test]
     fn test_marchenko_pastur() {
         // create random number generator
-        let mut rng = SmallRng::seed_from_u64(3);
+        let mut rng = SmallRng::seed_from_u64(0);
 
         // generate normal distribution random data with N >> p
         let data = Array2::random_using((1000, 500), StandardNormal, &mut rng);

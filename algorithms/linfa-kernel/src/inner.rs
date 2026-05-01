@@ -1,4 +1,5 @@
 use linfa::Float;
+use ndarray::linalg::Dot;
 use ndarray::prelude::*;
 use ndarray::Data;
 use sprs::{CsMat, CsMatView};
@@ -30,7 +31,7 @@ impl<F: Float, D: Data<Elem = F>> Inner for ArrayBase<D, Ix2> {
     type Elem = F;
 
     fn dot(&self, rhs: &ArrayView2<F>) -> Array2<F> {
-        self.dot(rhs)
+        Dot::dot(self, rhs)
     }
     fn sum(&self) -> Array1<F> {
         self.sum_axis(Axis(1))
@@ -39,7 +40,7 @@ impl<F: Float, D: Data<Elem = F>> Inner for ArrayBase<D, Ix2> {
         self.ncols()
     }
     fn column(&self, i: usize) -> Vec<F> {
-        self.column(i).to_vec()
+        self.index_axis(Axis(1), i).to_vec()
     }
     fn to_upper_triangle(&self) -> Vec<F> {
         self.indexed_iter()

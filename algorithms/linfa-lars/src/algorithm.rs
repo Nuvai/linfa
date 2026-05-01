@@ -148,7 +148,8 @@ fn lars_path<F: Float>(
             if (alpha[0] - alpha_min).abs() > equality_tolerance {
                 if n_iter > 0 {
                     let ss = (prev_alpha[0] - alpha_min) / (prev_alpha[0] - alpha[0]);
-                    coef.assign(&(&prev_coef + &(&coef - &prev_coef) * ss));
+                    let new_coef = &prev_coef + &(&coef - &prev_coef) * ss;
+                    coef.assign(&new_coef);
                 }
                 alpha[0] = alpha_min;
             }
@@ -596,7 +597,7 @@ mod tests {
         // Check that lars_path is robust to collinearity in input
         let mut rng = Xoshiro256Plus::seed_from_u64(0);
 
-        let x = Array::random_using((10, 5), Uniform::new(1., 2.), &mut rng);
+        let x = Array::random_using((10, 5), Uniform::new(1., 2.).unwrap(), &mut rng);
         let y = Array1::zeros(10);
 
         let (_, _, coef_path, _) = lars_path(&x.view(), &y.view(), 500, f64::EPSILON, false, 0.0);

@@ -394,7 +394,7 @@ mod tests {
         // roll decision according to probability
         let decisions = prob_values
             .iter()
-            .map(|x| rng.gen_bool(x.to_f64().unwrap()))
+            .map(|x| rng.random_bool(x.to_f64().unwrap()))
             .collect();
 
         (reg_values, decisions)
@@ -460,7 +460,7 @@ mod tests {
     #[test]
     /// Check that the predicted probabilities are non-decreasing monotonical
     fn ordered_probabilities() {
-        let mut rng = SmallRng::seed_from_u64(42);
+        let mut rng = SmallRng::seed_from_u64(0);
 
         let (reg_vals, dec_vals) = generate_dummy_values(1.0, 0.5, 102, &mut rng);
         let records = Array2::zeros((100, 3));

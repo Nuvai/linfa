@@ -555,7 +555,7 @@ mod tests {
     use super::{Label, Pr};
     use approx::assert_abs_diff_eq;
     use ndarray::{array, Array1, Array2, ArrayView1};
-    use rand::{distributions::Uniform, rngs::SmallRng, Rng, SeedableRng};
+    use rand::{distr::Uniform, rngs::SmallRng, Rng, SeedableRng};
     use std::collections::HashMap;
 
     fn get_labels_map<L: Label>(cm: &ConfusionMatrix<L>) -> HashMap<L, usize> {
@@ -689,7 +689,7 @@ mod tests {
         let mut rng = SmallRng::seed_from_u64(42);
         let predicted = Array1::linspace(0.0, 1.0, 1000).mapv(Pr::new);
 
-        let range = Uniform::new(0, 2);
+        let range = Uniform::new(0, 2).unwrap();
 
         // randomly sample ground truth
         let ground_truth = (0..1000)

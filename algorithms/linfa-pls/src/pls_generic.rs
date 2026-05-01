@@ -225,8 +225,9 @@ impl<F: Float, D: Data<Elem = F>> Fit<ArrayBase<D, Ix2>, ArrayBase<D, Ix2>, PlsE
                 Algorithm::Nipals => {
                     // Replace columns that are all close to zero with zeros
                     for mut yj in yk.columns_mut() {
+                        let len = yj.len();
                         if *(yj.mapv(|y| y.abs()).max()?) < F::cast(10.) * eps {
-                            yj.assign(&Array1::zeros(yj.len()));
+                            yj.assign(&Array1::zeros(len));
                         }
                     }
 

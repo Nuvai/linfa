@@ -27,9 +27,9 @@ default-features = false
 features = ["std", "derive"]
 
 [dependencies]
-ndarray = { version = "0.16", features = ["rayon", "approx"] }
-ndarray-rand = "0.15"
-rand = "0.8.5"
+ndarray = { version = "0.17", features = ["rayon", "approx"] }
+ndarray-rand = "0.16"
+rand = "0.9"
 
 linfa = { version = "0.8.1", path = "../.." }
 linfa-trees = { version = "0.8.1", path = "../linfa-trees" }

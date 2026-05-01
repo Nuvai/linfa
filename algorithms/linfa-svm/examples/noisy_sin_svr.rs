@@ -10,7 +10,7 @@ use rand_xoshiro::Xoshiro256Plus;
 /// Example inspired by https://scikit-learn.org/stable/auto_examples/svm/plot_svm_regression.html
 fn main() -> Result<()> {
     let mut rng = Xoshiro256Plus::seed_from_u64(42);
-    let range = Uniform::new(0., 5.);
+    let range = Uniform::new(0., 5.).unwrap();
     let mut x: Vec<f64> = (0..40).map(|_| rng.sample(range)).collect();
     x.sort_by(|a, b| a.partial_cmp(b).unwrap());
     let x = Array1::from_vec(x);
@@ -21,7 +21,7 @@ fn main() -> Result<()> {
     y.iter_mut()
         .enumerate()
         .filter(|(i, _)| i % 5 == 0)
-        .for_each(|(_, y)| *y = 3. * (0.5 - rng.gen::<f64>()));
+        .for_each(|(_, y)| *y = 3. * (0.5 - rng.random::<f64>()));
 
     let x = x.into_shape_with_order((40, 1)).unwrap();
     let dataset = DatasetBase::new(x, y);

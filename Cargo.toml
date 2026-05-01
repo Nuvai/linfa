@@ -37,12 +37,12 @@ serde = ["serde_crate", "ndarray/serde"]
 
 [dependencies]
 num-traits = "0.2"
-rand = { version = "0.8", features = ["small_rng"] }
+rand = { version = "0.9", features = ["small_rng"] }
 approx = "0.5"
 
-ndarray = { version = "0.16", features = ["approx"] }
-ndarray-linalg = { version = "0.17", optional = true }
-sprs = { version = "=0.11.2", default-features = false }
+ndarray = { version = "0.17", features = ["approx"] }
+ndarray-linalg = { version = "0.18", optional = true }
+sprs = { version = "0.11.4", default-features = false }
 
 thiserror = "2.0"
 
@@ -56,14 +56,14 @@ default-features = false
 features = ["std", "derive"]
 
 [dev-dependencies]
-ndarray-rand = "0.15"
+ndarray-rand = "0.16"
 linfa-datasets = { path = "datasets", features = [
     "winequality",
     "iris",
     "diabetes",
     "generate",
 ] }
-statrs = "0.18"
+statrs = { git = "https://github.com/statrs-dev/statrs", branch = "master" }
 
 [target.'cfg(not(windows))'.dependencies]
 pprof = { version = "0.15", features = [

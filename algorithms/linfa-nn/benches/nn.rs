@@ -19,7 +19,7 @@ fn nn_build_bench(c: &mut Criterion) {
     for &n_points in &[1000, 5000, 10000] {
         let rng = &mut rng;
         let points_arr =
-            Array2::random_using((n_points, n_features), Uniform::new(-500., 500.), rng);
+            Array2::random_using((n_points, n_features), Uniform::new(-500., 500.).unwrap(), rng);
 
         for (alg, name) in algorithms {
             benchmark.bench_with_input(
@@ -40,7 +40,7 @@ fn k_nearest_bench(c: &mut Criterion) {
     config::set_default_benchmark_configs(&mut benchmark);
 
     let n_features = 3;
-    let distr = Uniform::new(-500., 500.);
+    let distr = Uniform::new(-500., 500.).unwrap();
 
     let algorithms = &[
         (CommonNearestNeighbour::LinearSearch, "linear search"),
@@ -75,7 +75,7 @@ fn within_range_bench(c: &mut Criterion) {
     config::set_default_benchmark_configs(&mut benchmark);
 
     let n_features = 3;
-    let distr = Uniform::new(-50., 50.);
+    let distr = Uniform::new(-50., 50.).unwrap();
 
     let algorithms = &[
         (CommonNearestNeighbour::LinearSearch, "linear search"),

@@ -39,3 +39,9 @@ docs/website/static/rustdocs/
 
 # Downloaded data for the linfa-preprocessing benches
 20news/
+
+# Per-machine remote-dev VM override (written by /remote-dev:use-vm)
+.claude/build-remote.env.local
+
+# macOS Finder metadata
+.DS_Store

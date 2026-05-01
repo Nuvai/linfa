@@ -63,7 +63,7 @@ fn create_data() -> (Array2<f64>, Array2<f64>) {
     // Adding noise to the signals
     let mut rng = Xoshiro256Plus::seed_from_u64(42);
     sources_original +=
-        &Array::random_using((2000, 2), Uniform::new(0.0, 1.0), &mut rng).mapv(|x| x * 0.2);
+        &Array::random_using((2000, 2), Uniform::new(0.0, 1.0).unwrap(), &mut rng).mapv(|x| x * 0.2);
 
     // Mixing the two signals
     let mixing = array![[1., 1.], [0.5, 2.]];

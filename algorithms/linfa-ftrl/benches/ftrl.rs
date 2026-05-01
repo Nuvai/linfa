@@ -6,7 +6,7 @@ use linfa::{Dataset, DatasetBase, ParamGuard};
 use linfa_ftrl::Ftrl;
 use ndarray::{Array1, Array2};
 use ndarray_rand::{
-    rand::distributions::Uniform, rand::rngs::SmallRng, rand::SeedableRng, RandomExt,
+    rand::distr::Uniform, rand::rngs::SmallRng, rand::SeedableRng, RandomExt,
 };
 
 fn fit_without_prior_model(c: &mut Criterion) {
@@ -91,8 +91,8 @@ fn get_dataset(
     size: usize,
     nfeatures: usize,
 ) -> DatasetBase<Array2<f64>, Array1<bool>> {
-    let features = Array2::random_using((size, nfeatures), Uniform::from(-30. ..30.), rng);
-    let target = Array1::random_using(size, Uniform::from(0. ..1.), rng).mapv(to_binary);
+    let features = Array2::random_using((size, nfeatures), Uniform::new(-30., 30.).unwrap(), rng);
+    let target = Array1::random_using(size, Uniform::new(0., 1.).unwrap(), rng).mapv(to_binary);
     Dataset::new(features, target)
 }
 

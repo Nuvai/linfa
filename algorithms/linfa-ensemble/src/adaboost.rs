@@ -3,10 +3,10 @@ use linfa::{
     dataset::{AsTargets, AsTargetsMut, FromTargetArrayOwned},
     error::Error,
     traits::*,
-    DatasetBase,
+    DatasetBase, ParamGuard,
 };
 use ndarray::{Array1, Array2, Axis};
-use ndarray_rand::rand::distributions::WeightedIndex;
+use ndarray_rand::rand::distr::weighted::WeightedIndex;
 use ndarray_rand::rand::prelude::*;
 use ndarray_rand::rand::Rng;
 use std::{cmp::Eq, collections::HashMap, hash::Hash};
@@ -160,12 +160,18 @@ where
     D: Clone + ndarray::ScalarOperand,
     T: FromTargetArrayOwned<Owned = T> + AsTargets + Clone,
     T::Elem: Copy + Eq + Hash + std::fmt::Debug + Into<usize>,
-    P: Fit<Array2<D>, T, Error> + Clone,
-    P::Object: PredictInplace<Array2<D>, T>,
+    P: linfa::ParamGuard + Clone,
+    <P as linfa::ParamGuard>::Checked: Fit<Array2<D>, T, Error>,
+    Error: From<<P as linfa::ParamGuard>::Error>,
+    <<P as linfa::ParamGuard>::Checked as Fit<Array2<D>, T, Error>>::Object:
+        PredictInplace<Array2<D>, T>,
     R: Rng + Clone,
     usize: Into<T::Elem>,
 {
-    type Object = AdaBoost<P::Object, T::Elem>;
+    type Object = AdaBoost<
+        <<P as linfa::ParamGuard>::Checked as Fit<Array2<D>, T, Error>>::Object,
+        T::Elem,
+    >;
 
     fn fit(
         &self,
